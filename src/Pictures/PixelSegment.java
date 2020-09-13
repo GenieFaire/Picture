@@ -64,4 +64,19 @@ public class PixelSegment {
     public boolean is(int red, int green, int blue) {
         return this.red == red && this.green == green && this.blue == blue;
     }
+
+    public String toString() {
+        return "rouge : " + nextPixelSegment.getRed()
+                + "    vert : " + nextPixelSegment.getGreen()
+                + "    bleu : " + nextPixelSegment.getBlue()
+                + "    répétition du pixel : " + nextPixelSegment.getConsecutivePixelCount();
+    }
+
+    public void displaySegment() {
+        System.out.println(this.toString());
+        while (nextPixelSegment != null) {
+            nextPixelSegment.displaySegment();
+        }
+    }
+
 }
