@@ -5,23 +5,15 @@ public class PixelSegment {
     private int red = 0;
     private int green = 0;
     private int blue = 0;
-    private int pixelNumber;
-    private PixelSegment nextPixel;
+    private int consecutivePixelCount;
+    private PixelSegment nextPixelSegment;
 
-    public PixelSegment(int red, int green, int blue, int pixelNumber, PixelSegment nextPixel) {
+    public PixelSegment(int red, int green, int blue) {
         this.red = red;
         this.green = green;
         this.blue = blue;
-        this.pixelNumber = pixelNumber;
-        this.nextPixel = nextPixel;
-    }
-
-    public PixelSegment(int red, int green, int blue, int pixelNumber) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.pixelNumber = pixelNumber;
-        this.nextPixel = null;
+        this.consecutivePixelCount = 1;
+        this.nextPixelSegment = null;
     }
 
     public int getRed() {
@@ -48,19 +40,28 @@ public class PixelSegment {
         this.blue = blue;
     }
 
-    public int getPixelNumber() {
-        return pixelNumber;
+    public int getConsecutivePixelCount() {
+        return consecutivePixelCount;
     }
 
-    public void setPixelNumber(int pixelNumber) {
-        this.pixelNumber = pixelNumber;
+    public void setConsecutivePixelCount(int consecutivePixelCount) {
+        this.consecutivePixelCount = consecutivePixelCount;
     }
 
-    public PixelSegment getNextPixel() {
-        return nextPixel;
+    public PixelSegment getNextPixelSegment() {
+        return nextPixelSegment;
     }
 
-    public void setNextPixel(PixelSegment nextPixel) {
-        this.nextPixel = nextPixel;
+    public void setNextPixelSegment(PixelSegment nextPixelSegment) {
+
+        this.nextPixelSegment = nextPixelSegment;
+    }
+
+    public void incConsecutivePixelCount() {
+        this.consecutivePixelCount++;
+    }
+
+    public boolean is(int red, int green, int blue) {
+        return this.red == red && this.green == green && this.blue == blue;
     }
 }

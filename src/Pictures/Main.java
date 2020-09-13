@@ -6,7 +6,9 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
         String fileName;
         char c = 0;
@@ -32,23 +34,26 @@ public class Main {
                 index++;
             }
 
-            red = pixelPoint(br);
-            green = pixelPoint(br);
-            blue = pixelPoint(br);
+            while (true) {
+                red = getPixelPoint(br);
+                green = getPixelPoint(br);
+                blue = getPixelPoint(br);
 
-                red2 = pixelPoint(br);
-                green2 = pixelPoint(br);
-                blue2 = pixelPoint(br);
-
-                if (red == red2 && green == green2 && blue == blue2) {
-                    nombreIdentique += 1;
-                } else {
-                    list.ajouterALaFin(red, green, blue, nombreIdentique);
-                    red = red2;
-                    green = green2;
-                    blue = blue2;
-                    list.getDernierSegment();
+                if (red == -1 || green == -1 || blue == -1) {
+                    break;
                 }
+
+                PixelSegment lastSegment = list.getLastPixelSegment();
+                if (lastSegment != null
+                        && lastSegment.is(red, green, blue)) {
+                    lastSegment.incConsecutivePixelCount();
+                } else {
+                    PixelSegment nextPixelSegment = list.createPixelSegment(red, green, blue);
+                    if (lastSegment != null) lastSegment.setNextPixelSegment(nextPixelSegment);
+                }
+            }
+
+            System.out.print(list.getFirst());
 
         } catch (FileNotFoundException ex) {
             System.out.println("LE fichier n'existe pas");
@@ -69,19 +74,38 @@ public class Main {
         System.out.println("Le nombre maximal utilisable pour représenter les couleurs est : " + number);
     }
 
-    public static int pixelPoint(BufferedReader br) throws IOException {
-        int caractere = br.read();
+    /**
+     * Returns -1 if no more character to read
+     * @param br
+     * @return
+     * @throws IOException
+     */
+    public static int getPixelPoint(BufferedReader br) throws IOException {
 
-        int color = 0;
 
-        while (!Character.isWhitespace(caractere) ) {
-            if (caractere == -1 || caractere == '\n') {
+        String strColor = null;
+
+        while (true) {
+
+            int currentChar = br.read();
+            if (currentChar == -1) {
                 break;
-            } else {
-                color += (char) caractere;
-                caractere = br.read();
             }
+
+            if (Character.isWhitespace(currentChar)) {
+                if (strColor != null) {
+                    break;
+                }
+                continue;
+            }
+
+            if (strColor == null) {
+                strColor = "" + (char)currentChar;
+            } else {
+                strColor = strColor + (char)currentChar;
+            }
+
         }
-        return color;
+        return strColor != null ? Integer.parseInt(strColor) : -1;
     }
 }
